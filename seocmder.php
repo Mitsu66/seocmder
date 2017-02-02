@@ -1,11 +1,19 @@
 <?php
 require('lib/params/params.php');
-$tool = $argv[1];
-$script = dirname($_SERVER["PHP_SELF"]).'/tools/'.$tool.'/'.$tool.'.php';
-$helper = dirname($_SERVER["PHP_SELF"]).'/tools/'.$tool.'/help.txt';
 
 //var_dump($params);
 //exit;
+
+if(!isset($params->arg[1]))
+{
+	echo "Please type seocmder --help to see how to use seocmder";
+	exit;
+}
+
+$tool = $params->arg[1];
+$script = dirname($_SERVER["PHP_SELF"]).'/tools/'.$tool.'/'.$tool.'.php';
+$helper = dirname($_SERVER["PHP_SELF"]).'/tools/'.$tool.'/help.txt';
+
 
 if($params->arg[1]=="--help")
 {
