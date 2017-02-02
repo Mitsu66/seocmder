@@ -17,7 +17,7 @@ seocmder --help
 
 ### 1. Calculate internal pagerank on your website.
 
-Step 1 : Format the screaming frog outlinks export
+Step 1 : Format the screaming frog outlinks export in a compatible format to seocmder.
 ```
 seocmder pri sf-outlinks screamingfrog_export.csv links.txt
 ```
@@ -42,7 +42,7 @@ You need to have a masterspin in file and :
 seocmder spin masterspin.txt spins.txt -limit=50
 ```
 
-limit is the max percent of similarity accepted for your spins.
+**limit** is the max percent of similarity accepted for your spins.
 
 You can see the help with this command : 
 
@@ -69,7 +69,7 @@ seocmder stemmer --help
 ### Installation
 #### 1. Linux
 
-You needs to have php installed and php-curl library.
+You need to have php installed and php-curl library.
 Replace by your own path and add an alias with the console :
 ```
 alias seocmder="php /var/seocmder/seocmder.php"
@@ -78,7 +78,7 @@ alias seocmder="php /var/seocmder/seocmder.php"
 it's ok you can enter **seocmder --help** to confirm installation.
 #### 2. Windows
 
-You needs to have php installed and php-curl library. You can install wamp server on windows : [Download Wamp Server](http://www.wampserver.com/)
+You need to have php installed and php-curl library. You can install wamp server on windows : [Download Wamp Server](http://www.wampserver.com/)
 
 Replace by your own path :
 
