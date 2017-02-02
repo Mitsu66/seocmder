@@ -1,0 +1,3 @@
+seocmder spin <masterspin file> <exportfile> -limit=<limit>
+<limit> is max percent of similarity accepted
+Example: seocmder spin master.txt spin.txt -limit=50
