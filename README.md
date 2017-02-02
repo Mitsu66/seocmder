@@ -13,7 +13,7 @@ After installation enter help command to know how to use :
 ``` 
 seocmder --help
 ```
-## Detailled Features
+## Detailed features
 
 ### 1. Calculate internal pagerank on your website.
 
@@ -42,7 +42,7 @@ You need to have a masterspin in file and :
 seocmder spin masterspin.txt spins.txt -limit=50
 ```
 
-**limit** is the max percent of similarity accepted for your spins.
+**limit** is the maximum percent of similarity accepted for your spins.
 
 You can see the help with this command : 
 
@@ -86,4 +86,4 @@ Replace by your own path :
 doskey seocmder=C:\wamp64\bin\php\php7.0.10\php.exe C:\test\test.php $*
 ```
 
-it's ok you can enter **seocmder --help** to confirm installation.
+When the installation is completed, you can then enter **seocmder --help** .
