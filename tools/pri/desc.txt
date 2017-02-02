@@ -1,1 +1,1 @@
-Calculate internal pagerank
+Internal pagerank calculator

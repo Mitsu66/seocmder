@@ -1,7 +1,7 @@
-stemmer <url> <exportfile>
+seocmder stemmer <url> <exportfile>
 	extract stem from an url
 	Example : seocmder http://www.mitseo.net export.txt
 
-stemmer multiple-count <urls file> <exportfile>
+seocmder stemmer multiple-count <urls file> <exportfile>
 Count incrementals stem from urls
-	Example : seocmder urls.txt export.txt
+	Example : seocmder stemmer urls.txt export.txt

@@ -1,12 +1,13 @@
+First, you have to convert an outlinks csv report from screaming frog to the correct format for calculate internal pagerank. Enter...
 
-seocmder pri sf-outlinks <filename>
-Convert an outlinks csv report from screaming frog to the correct format for calculate internal pagerank.
-Example : seocmder pri sf-outlinks all_outlinks.csv links.csv
+seocmder pri <sf-outlinks> <filename>
+Example : seocmder pri sf-outlinks.csv all_outlinks.csv links.csv
 
+Now, you can calculate the pagerank , Enter...
 seocmder pri <links_files> <export file>
 Example : seocmder pri links.csv pagerank.csv
 
-You can setup 2 parameters for the calculate internal pagerank
+You can setup 2 parameters
 
 -DumpingFactor
 -Iterations

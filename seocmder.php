@@ -1,9 +1,6 @@
 <?php
 require('lib/params/params.php');
 
-//var_dump($params);
-//exit;
-
 if(!isset($params->arg[1]))
 {
 	echo "Please type seocmder --help to see how to use seocmder";
@@ -25,7 +22,7 @@ if($params->arg[1]=="--help")
 			echo "[+] ".$cmd."\r\n";
 			echo "\t ".file_get_contents(dirname($_SERVER["PHP_SELF"]).'/tools/'.$cmd.'/desc.txt');
 			echo "\r\n";
-			echo "\t => type seocmder $cmd --help for more informations";
+			echo "\t => Enter seocmder $cmd --help for more informations";
 			echo "\r\n";
 			echo "----------------------------------------";
 			echo "\r\n";
@@ -43,7 +40,7 @@ if(isset($params->arg[2]) && $params->arg[2]=="--help")
 		echo file_get_contents($helper);
 		exit;
 	} else {
-		echo "$tool not exist, please type seocmder --help to see";
+		echo "$tool not exist, please enter seocmder --help to know how to use";
 		exit;
 	}
 }
@@ -53,6 +50,6 @@ if(is_file($script))
 {
 	include($script);
 } else {
-	echo "$tool not exist, please type seocmder --help to see";
+	echo "$tool not exist, please enter seocmder --help know how to use";
 	exit;
 }

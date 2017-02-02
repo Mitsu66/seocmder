@@ -1,1 +1,1 @@
-Spinning tools
+Generate spins from a masterspin
