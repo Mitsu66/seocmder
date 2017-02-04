@@ -65,7 +65,7 @@ You can define more options, enter that command to know how :
 seocmder stemmer --help
 ```
 
-### 2. Contact
+### 3. Contact
 You can get webmaster contact from an url with the **contact** command.
 For example, if you want to contact the webmaster of this specific url http://www.mitseo.net
 Just enter
