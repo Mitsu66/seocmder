@@ -2,9 +2,8 @@
 require('simple_html_dom.php');
 require('Whois/Whois.php');
 
-function get_links($url)
+function get_html($url)
 {
-
 	$curl = curl_init();
     curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
     curl_setopt($curl, CURLOPT_HEADER, false);
@@ -17,8 +16,24 @@ function get_links($url)
     curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.125 Safari/533.4");
     $str = curl_exec($curl);
     curl_close($curl);
+	return $str;
+}
 
+function get_tel($str)
+{
+	preg_match("#\+[0-9]{2,3} \(?[0-9]?\)?[0-9]* [0-9]* [0-9]* [0-9]* [0-9]*#",$str,$tels);
+	if(count($tels) == 0)
+	{
+		preg_match("#\+?[0-9]+ [0-9]* [0-9]* [0-9]* [0-9]*#",$str,$tels);
+	}
+	if(isset($tels[0])) { $tel = $tels[0]; }
+	else { $tel = ""; }
+	return $tel;
+	
+}
 
+function get_links($str)
+{
     // Create a DOM object
     $dom = new simple_html_dom();
     // Load HTML from a string
@@ -170,7 +185,9 @@ function check_all($url)
 	$protocol = $protocol[0];
 	$protocol = $protocol."://";
 
-	$links = get_links($url);
+	$html = get_html($url);
+	$tel = get_tel($html);
+	$links = get_links($html);
 	$social = get_social_profiles($links);
 	$mailto = get_mailto($links);
 
@@ -183,12 +200,40 @@ function check_all($url)
 		"contactForm" => $contact_form,
 		"social" => $social,
 		"mailto" => $mailto,
-		"whoisEmails" => $whois_emails
+		"whoisEmails" => $whois_emails,
+		"tel" => $tel
 	);
 }
 
-$urls_file = $argv[2];
-$export_file = $argv[3];
+if(substr($params->arg[2],0,7) == "http://" || substr($params->arg[2],0,7) == "https:/")
+{
+	$url = $params->arg[2];
+	check_all($url);
+	
+	if(!empty($data[0]->tel)) echo "Tel : ".$data[0]->tel."\r\n";
+	
+	if(!empty($data[0]->contactForm)) echo "Contact form : ".$data[0]->contactForm."\r\n";
+	
+	echo "\r\nSOCIAL NETWORKS :\r\n";
+	if(isset($data[0]->social->facebook)) echo "- Facebook : ".$data[0]->social->facebook."\r\n";
+	if(isset($data[0]->social->twitter)) echo "- Twitter : ".$data[0]->social->twitter."\r\n";
+	if(isset($data[0]->social->googleplus)) echo "- Googleplus : ".$data[0]->social->googleplus."\r\n";
+	if(isset($data[0]->social->linkedin)) echo "- Linkedin : ".$data[0]->social->linkedin."\r\n";
+	if(isset($data[0]->social->viadeo)) echo "- Viadeo : ".$data[0]->social->viadeo."\r\n";
+
+	
+	echo "\r\nEMAILS :\r\n";
+	if(!empty($data[0]->mailto)) echo "- Mailto : ".$data[0]->mailto."\r\n";
+	if(isset($data[0]->whoisEmails[0])) echo "- Whois : ".$data[0]->whoisEmails[0]."\r\n";
+	if(isset($data[0]->whoisEmails[1])) echo "- Whois : ".$data[0]->whoisEmails[1]."\r\n";
+	if(isset($data[0]->whoisEmails[2])) echo "- Whois : ".$data[0]->whoisEmails[2]."\r\n";
+	
+	//var_dump($data);
+	exit;
+}
+
+$urls_file = $params->arg[2];
+$export_file = $params->arg[3];
 $urls = file_get_contents($urls_file);
 $urls= explode("\r\n",$urls);
 
@@ -198,7 +243,7 @@ foreach($urls as $url)
 	check_all($url);
 }
 
-$export_data = "dom\turl\tcontact-form\tmailto\ttwitter\tfacebook\tgoogleplus\tlinkedin\tviadeo\twhois1\twhois2\twhois3";
+$export_data = "dom\turl\ttel\tcontact-form\tmailto\ttwitter\tfacebook\tgoogleplus\tlinkedin\tviadeo\twhois1\twhois2\twhois3";
 
 foreach($data as $dom)
 {
@@ -207,6 +252,8 @@ foreach($data as $dom)
 	$export_data .= $dom->dom;
 	$export_data .= "\t";
 	$export_data .= $dom->url;
+	$export_data .= "\t";
+	$export_data .= $dom->tel;
 	$export_data .= "\t";
 	$export_data .= $dom->contactForm;
 	$export_data .= "\t";
