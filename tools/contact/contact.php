@@ -2,17 +2,6 @@
 require('simple_html_dom.php');
 require('Whois/Whois.php');
 
-$url = $argv[2];
-
-$dom = str_replace("http://","",$url);
-$dom = str_replace("https://","",$dom);
-$dom = explode("/",$dom);
-$dom = $dom[0];
-
-$protocol = explode(":",$url);
-$protocol = $protocol[0];
-$protocol = $protocol."://";
-
 function get_links($url)
 {
 
@@ -22,6 +11,9 @@ function get_links($url)
     curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($curl, CURLOPT_CONNECTTIMEOUT ,5); 
+	curl_setopt($curl, CURLOPT_TIMEOUT, 5); //timeout in seconds
+
     curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.125 Safari/533.4");
     $str = curl_exec($curl);
     curl_close($curl);
@@ -45,9 +37,7 @@ function get_links($url)
 	
 }
 
-function get_form_contact($links){
-	global $dom;
-	global $protocol;
+function get_form_contact($links,$dom,$protocol){
 	
 	$contact = "";
 	foreach($links as $link)
@@ -109,7 +99,7 @@ function get_emails_whois($dom)
 		$emails_final = array();
 		foreach($return_mail as $email)
 		{
-			if(!strstr($email,"1and1") && !strstr($email,"ovh") && !strstr($email,"abuse") && !strstr($email,"host") && !strstr($email,"spam") && !strstr($email,"support") && !strstr($email,"bookmyname") && !strstr($email,"gandi.net"))
+			if(!strstr($email,"1and1") && !strstr($email,"ovh") && !strstr($email,"abuse") && !strstr($email,"host") && !strstr($email,"spam") && !strstr($email,"support") && !strstr($email,"bookmyname") && !strstr($email,"gandi.net") && !strstr($email,"o-w-o") && !strstr($email,"nic.fr") && !strstr($email,"admin") && !strstr($email,"regist") && !strstr($email,"dns") && !strstr($email,"domain") && !strstr($email,"whois") && !strstr($email,"privacy") && !strstr($email,"notify") && !strstr($email,"nic@") && !strstr($email,"postmaster") && !strstr($email,"private") && !strstr($email,"tld") && !strstr($email,"provid") && !strstr($email,"markmonitor"))
 			{
 				$emails_final[] = $email;
 			}
@@ -165,22 +155,82 @@ function get_mailto($links)
 	}
 	return $mailto;
 }
+$data = array();
 
-$links = get_links($url);
-$social = get_social_profiles($links);
-$mailto = get_mailto($links);
+function check_all($url)
+{
+	global $data;
+	
+	$dom = str_replace("http://","",$url);
+	$dom = str_replace("https://","",$dom);
+	$dom = explode("/",$dom);
+	$dom = $dom[0];
 
-$contact_form = get_form_contact($links);
-$whois_emails = get_emails_whois($dom);
+	$protocol = explode(":",$url);
+	$protocol = $protocol[0];
+	$protocol = $protocol."://";
 
-$data = (object) array(
-	"contact-form" => $contact_form,
-	"social" => $social,
-	"mailto" => $mailto,
-	"whois-emails" => $whois_emails
-);
+	$links = get_links($url);
+	$social = get_social_profiles($links);
+	$mailto = get_mailto($links);
 
-var_dump($data);
+	$contact_form = get_form_contact($links,$dom,$protocol);
+	$whois_emails = get_emails_whois($dom);
 
-// ADD email from string mailto:
-// ADD Twitter Facebook et Googleplus
+	$data[] = (object) array(
+		"dom" => $dom,
+		"url" => $url,
+		"contactForm" => $contact_form,
+		"social" => $social,
+		"mailto" => $mailto,
+		"whoisEmails" => $whois_emails
+	);
+}
+
+$urls_file = $argv[2];
+$export_file = $argv[3];
+$urls = file_get_contents($urls_file);
+$urls= explode("\r\n",$urls);
+
+foreach($urls as $url)
+{
+	echo "Url : ".$url."\r\n";
+	check_all($url);
+}
+
+$export_data = "dom\turl\tcontact-form\tmailto\ttwitter\tfacebook\tgoogleplus\tlinkedin\tviadeo\twhois1\twhois2\twhois3";
+
+foreach($data as $dom)
+{
+	$export_data .= "\r\n";
+	
+	$export_data .= $dom->dom;
+	$export_data .= "\t";
+	$export_data .= $dom->url;
+	$export_data .= "\t";
+	$export_data .= $dom->contactForm;
+	$export_data .= "\t";
+	$export_data .= $dom->mailto;
+	$export_data .= "\t";
+	if(isset($dom->social->twitter)) { $export_data .= $dom->social->twitter; }
+	$export_data .= "\t";
+	if(isset($dom->social->facebook)) { $export_data .= $dom->social->facebook; }
+	$export_data .= "\t";
+	if(isset($dom->social->googleplus)) { $export_data .= $dom->social->googleplus; }
+	$export_data .= "\t";
+	if(isset($dom->social->linkedin)) { $export_data .= $dom->social->linkedin; }
+	$export_data .= "\t";
+	if(isset($dom->social->viadeo)) { $export_data .= $dom->social->viadeo; }
+	$export_data .= "\t";
+	if(isset($dom->whoisEmails[0])) { $export_data .= $dom->whoisEmails[0]; }
+	$export_data .= "\t";
+	if(isset($dom->whoisEmails[1])) { $export_data .= $dom->whoisEmails[1]; }
+	$export_data .= "\t";
+	if(isset($dom->whoisEmails[2])) { $export_data .= $dom->whoisEmails[2]; }
+	
+}
+
+file_put_contents($export_file,$export_data);
+
+//Add Phone number
+//Add Skype
