@@ -65,6 +65,30 @@ You can define more options, enter that command to know how :
 seocmder stemmer --help
 ```
 
+### 2. Contact
+You can get webmaster contact from an url with the **contact** command.
+For example, if you want to contact the webmaster of this specific url http://www.mitseo.net
+Just enter
+
+```
+seocmder contact http://www.mitseo.net
+```
+
+It's return all informations that you can find on this website for contact the webmaster :
+- Whois emails
+- Mailto links
+- Contact form url
+- Phone number
+- Twitter profile
+- Facebook profile
+- Linkedin profile
+
+You can use it for many urls. Write all urls you want in a txt file and enter this :
+```
+seocmder contact urls.txt contact.txt
+```
+
+It will generate a txt file, you can open it with Excel or Open office.
 
 ### Installation
 #### 1. Linux
