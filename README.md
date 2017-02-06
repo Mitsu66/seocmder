@@ -9,8 +9,8 @@ Seocmder is a php command line tool which can help you in many seo tasks.
 - Stemming tool
 - Spinner tool
 
-After installation enter help command to know how to use : 
-``` 
+After installation enter help command to know how to use :
+```
 seocmder --help
 ```
 ## Detailed features
@@ -28,7 +28,7 @@ Step 2 : Calculate pri and export data on a new file
 seocmder pri links.txt pri.txt
 ```
 
-You can define more options, enter that command to know how : 
+You can define more options, enter that command to know how :
 
 ```
 seocmder pri --help
@@ -36,7 +36,7 @@ seocmder pri --help
 
 ### 2. Spinner.
 
-You need to have a masterspin in file and : 
+You need to have a masterspin in file and :
 
 ```
 seocmder spin masterspin.txt spins.txt -limit=50
@@ -44,7 +44,7 @@ seocmder spin masterspin.txt spins.txt -limit=50
 
 **limit** is the maximum percent of similarity accepted for your spins.
 
-You can see the help with this command : 
+You can see the help with this command :
 
 ```
 seocmder spin --help
@@ -59,7 +59,7 @@ seocmder stemmer http://www.mitseo.net export.txt
 ```
 
 
-You can define more options, enter that command to know how : 
+You can define more options, enter that command to know how :
 
 ```
 seocmder stemmer --help
