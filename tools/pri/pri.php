@@ -25,8 +25,8 @@ for($i=4;$i<20;$i++)
 	}
 }
 */
-$d = $params->variable["DumpingFactor"];
-$iteration = $params->variable["Iterations"];
+if(isset($params->variable["DumpingFactor"])) { $d = $params->variable["DumpingFactor"]; }
+if (isset($params->variable["Iterations"])) { $iteration = $params->variable["Iterations"]; }
 
 echo "Iterations : $iteration\r\nDumpingFactor : $d";
 echo "\r\n";

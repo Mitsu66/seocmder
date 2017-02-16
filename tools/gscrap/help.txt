@@ -1,0 +1,6 @@
+To scrapp top 100 from a keyword on google.FR
+seocmder gscrap "keyword"
+
+to scrapp on other country, use param ext.
+if ext=de, you scrapp google.de.
+seocmder gscrap "keyword" -ext=de
