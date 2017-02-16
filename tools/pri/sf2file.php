@@ -2,7 +2,10 @@
 $export = '';
 
 $file = $argv[3];
+if(!file_exists($file)) { echo "$file doesn't exist"; exit;}
+if(!isset($argv[4])) { echo "You have to define output file"; exit;}
 $file_export = $argv[4];
+
 
 function extract_dom($url){
 	$dom = str_replace("http://","",$url);

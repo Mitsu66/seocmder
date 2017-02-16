@@ -3,6 +3,7 @@
 require('simple_html_dom.php');
 $ext = "fr";
 if(isset($params->variable["ext"])) $ext= $params->variable["ext"];
+
 $keyword = $params->arg[2];
 $output = $params->arg[3];
 
