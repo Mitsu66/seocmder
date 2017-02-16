@@ -5,6 +5,7 @@ $spun = array();
 $spin = file_get_contents($params->arg[2]);
  
  function test( $item1, $item2) {
+	similar_text($item1,$item2,$similartext);
 	$item1 = str_replace(","," ",$item1);
 	$item1 = str_replace("."," ",$item1);
 	$item1 = str_replace("'"," ",$item1);
@@ -42,19 +43,26 @@ $spin = file_get_contents($params->arg[2]);
 			$replace[] = $select[rand(0, count($select)-1)];
 		}
 		$reponse = str_replace($find, $replace, $str);
+		$reponse = str_replace("\r\n", " ", $reponse);
+		$reponse = str_replace("  ", " ", $reponse);
+		$reponse = str_replace("  ", " ", $reponse);
 
 		return spin($reponse);
 	}	
 	
 	$tries = 0;
 	$limit = 65;
-	$limit = $params->variable["limit"];
-	echo $limit;
+	$quantity = 0;
+	if(isset($params->variable["limit"])) $limit = $params->variable["limit"];
+	if(isset($params->variable["quantity"])) $quantity = $params->variable["quantity"];
+	echo "LIMIT = ".$limit."\r\n";
+	echo "Quantity = ".$quantity."\r\n";
 
 	$try = 100;
 	$stop = 100;		
 	function spining($spin)
 	{
+		global $quantity;
 		global $try;
 		global $tries;
 		global $spun;
@@ -70,32 +78,38 @@ $spin = file_get_contents($params->arg[2]);
 		}
 		else 
 		{
-			$valid = true;
-			foreach($spun as $compare)
+			if($quantity!=0)
 			{
-				if(test($text,$compare)>$limit)
+				if(count($spun)<$quantity ) { $spun[] = $text; spining($spin); }
+				
+			} else {
+				
+				$valid = true;
+				foreach($spun as $compare)
 				{
-					$valid = false;
-					$tries++;
-					if($tries<$try)
+					if(test($text,$compare)>$limit)
 					{
-						spining($spin);
+						$valid = false;
+						$tries++;
+						if($tries<$try)
+						{
+							spining($spin);
+						}
+						
 					}
-					
 				}
-			}
-			if($valid==true)
-			{
-				$spun[] = $text;
-				if(count($spun)==$stop)
+				if($valid==true)
 				{
-					var_dump($spun); exit;
+					$spun[] = $text;
+					if(count($spun)==$stop)
+					{
+						var_dump($spun); exit;
+					}
+					$tries=0;
+					spining($spin);
 				}
-				$tries=0;
-				spining($spin);
+				
 			}
-			
-			
 		}
 		
 	}
