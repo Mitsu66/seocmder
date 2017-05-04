@@ -1,5 +1,6 @@
 <?php
 require('lib/params/params.php');
+require('lib/console/console.php');
 
 if(!isset($params->arg[1]))
 {
@@ -19,7 +20,8 @@ if($params->arg[1]=="--help")
 	{
 		if($cmd!="." && $cmd!="..")
 		{
-			echo "[+] ".$cmd."\r\n";
+
+			$Console->write("[+] ".$cmd."\r\n","Green");
 			echo "\t ".file_get_contents(dirname($_SERVER["PHP_SELF"]).'/tools/'.$cmd.'/desc.txt');
 			echo "\r\n";
 			echo "\t => Enter seocmder $cmd --help for more informations";
@@ -29,7 +31,7 @@ if($params->arg[1]=="--help")
 			echo "\r\n";
 		}
 	}
-	
+
 	exit;
 }
 

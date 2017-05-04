@@ -1,9 +1,6 @@
 <?php
-require('Whois/Whois.php');
 require('simple_html_dom.php');
-require(__DIR__.'/../../lib/Crimp/Crimp.php');
-
-
+require('Whois/Whois.php');
 
 $time = time();
 
@@ -23,6 +20,7 @@ function get_html($url)
     curl_close($curl);
 	return $str;
 }
+
 function get_tel($str)
 {
 	preg_match("#\+[0-9]{2,3} \(?[0-9]?\)?[0-9]* [0-9]* [0-9]* [0-9]* [0-9]*#",$str,$tels);
@@ -35,6 +33,7 @@ function get_tel($str)
 	return $tel;
 
 }
+
 function get_links($str)
 {
     // Create a DOM object
@@ -54,6 +53,7 @@ function get_links($str)
 	return $get_links;
 
 }
+
 function get_form_contact($links,$dom,$protocol){
 
 	$contact = "";
@@ -172,103 +172,22 @@ function get_mailto($links)
 	}
 	return $mailto;
 }
-if(substr($params->arg[2],0,7) == "http://" || substr($params->arg[2],0,7) == "https:/")
-{
-	$url = $params->arg[2];
-
-  $dom = str_replace("http://","",$url);
-	$dom = str_replace("https://","",$dom);
-	$dom = explode("/",$dom);
-	$dom = $dom[0];
-
-  //$Console->write($count." (","Green");
-  //$Console->write($dom);
-  //$Console->write(")\r\n","Green");
-
-	$protocol = explode(":",$url);
-	$protocol = $protocol[0];
-	$protocol = $protocol."://";
-
-  $html = get_html($url);
-	$tel = get_tel($html);
-	$links = get_links($html);
-	$social = get_social_profiles($links);
-	$mailto = get_mailto($links);
-
-	$contact_form = get_form_contact($links,$dom,$protocol);
-	$whois_emails = get_emails_whois($dom);
-  $Console->write("_____________________________________________________\r\n\r\n","Cyan");
-	if(!empty($tel)) {$Console->write("Tel : ","Green"); echo $tel."\r\n"; }
-
-	if(!empty($contact_form)) { $Console->write("Contact form : ","Green"); echo $contact_form."\r\n"; }
-
-  $Console->write("\r\nSocial Network :\r\n","Cyan");
-	if(isset($social->facebook)) {$Console->write("- Facebook : ","Green"); echo $social->facebook."\r\n"; }
-	if(isset($social->twitter)) {$Console->write("- Twitter : ","Green"); echo $social->twitter."\r\n"; }
-	if(isset($social->googleplus)) {$Console->write("- Googleplus : ","Green"); echo $social->googleplus."\r\n"; }
-	if(isset($social->linkedin)) {$Console->write("- Linkedin : ","Green"); echo $social->linkedin."\r\n"; }
-	if(isset($social->viadeo)) {$Console->write("- Viadeo : ","Green"); echo $social->viadeo."\r\n"; }
-
-
-	$Console->write("\r\nEmails :\r\n","Cyan");
-	if(!empty($mailto)) echo "- Mailto : ".$mailto."\r\n";
-	if(isset($whois_emails[0])) { $Console->write("- Whois : ","Green"); echo $whois_emails[0]."\r\n"; }
-  if(isset($whois_emails[1])) { $Console->write("- Whois : ","Green"); echo $whois_emails[1]."\r\n"; }
-  if(isset($whois_emails[2])) { $Console->write("- Whois : ","Green"); echo $whois_emails[2]."\r\n"; }
-  $Console->write("\r\n_____________________________________________________\r\n","Cyan");
-	//var_dump($data);
-	exit;
-}
-
-
-
-$urls_file = $params->arg[2];
-$export_file = $params->arg[3];
-$urls = file_get_contents($urls_file);
-$urls = explode("\r\n",$urls);
-$count = 0;
-
-
-$Crimp = new Crimp( 'CrimpCallback' );
-$Crimp->Urls = $urls;
-
-$Crimp->CurlOptions[ CURLOPT_FOLLOWLOCATION ] = False;
-$Crimp->CurlOptions[ CURLOPT_HEADER ] = FALSE;
-$Crimp->CurlOptions[ CURLOPT_SSL_VERIFYPEER ] = FALSE;
-$Crimp->CurlOptions[ CURLOPT_CONNECTTIMEOUT ] = 2;
-$Crimp->CurlOptions[ CURLOPT_TIMEOUT ] = 2;
-$Crimp->CurlOptions[ CURLOPT_USERAGENT ] = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.125 Safari/533.4";
-$Crimp->Go();
 $data = array();
 
-$export_data = "";
-
-
-function CrimpCallback( $Handle, $html )
+function check_all($url)
 {
 	global $data;
-  global $count;
-  global $Console;
-  global $export_data;
-  global $export_file;
-  global $urls;
-
-  $count++;
-  $url = curl_getinfo( $Handle, CURLINFO_EFFECTIVE_URL );
 
 	$dom = str_replace("http://","",$url);
 	$dom = str_replace("https://","",$dom);
 	$dom = explode("/",$dom);
 	$dom = $dom[0];
 
-  $Console->write($count." (","Green");
-  $Console->write($dom);
-  $Console->write(")\r\n","Green");
-
 	$protocol = explode(":",$url);
 	$protocol = $protocol[0];
 	$protocol = $protocol."://";
 
+	$html = get_html($url);
 	$tel = get_tel($html);
 	$links = get_links($html);
 	$social = get_social_profiles($links);
@@ -277,7 +196,7 @@ function CrimpCallback( $Handle, $html )
 	$contact_form = get_form_contact($links,$dom,$protocol);
 	$whois_emails = get_emails_whois($dom);
 
-	$dom = (object) array(
+	$data[] = (object) array(
 		"dom" => $dom,
 		"url" => $url,
 		"contactForm" => $contact_form,
@@ -286,8 +205,52 @@ function CrimpCallback( $Handle, $html )
 		"whoisEmails" => $whois_emails,
 		"tel" => $tel
 	);
+}
 
-  $export_data .= "\r\n";
+if(substr($params->arg[2],0,7) == "http://" || substr($params->arg[2],0,7) == "https:/")
+{
+	$url = $params->arg[2];
+	check_all($url);
+
+	if(!empty($data[0]->tel)) echo "Tel : ".$data[0]->tel."\r\n";
+
+	if(!empty($data[0]->contactForm)) echo "Contact form : ".$data[0]->contactForm."\r\n";
+
+	echo "\r\nSOCIAL NETWORKS :\r\n";
+	if(isset($data[0]->social->facebook)) echo "- Facebook : ".$data[0]->social->facebook."\r\n";
+	if(isset($data[0]->social->twitter)) echo "- Twitter : ".$data[0]->social->twitter."\r\n";
+	if(isset($data[0]->social->googleplus)) echo "- Googleplus : ".$data[0]->social->googleplus."\r\n";
+	if(isset($data[0]->social->linkedin)) echo "- Linkedin : ".$data[0]->social->linkedin."\r\n";
+	if(isset($data[0]->social->viadeo)) echo "- Viadeo : ".$data[0]->social->viadeo."\r\n";
+
+
+	echo "\r\nEMAILS :\r\n";
+	if(!empty($data[0]->mailto)) echo "- Mailto : ".$data[0]->mailto."\r\n";
+	if(isset($data[0]->whoisEmails[0])) echo "- Whois : ".$data[0]->whoisEmails[0]."\r\n";
+	if(isset($data[0]->whoisEmails[1])) echo "- Whois : ".$data[0]->whoisEmails[1]."\r\n";
+	if(isset($data[0]->whoisEmails[2])) echo "- Whois : ".$data[0]->whoisEmails[2]."\r\n";
+
+	//var_dump($data);
+	exit;
+}
+
+$urls_file = $params->arg[2];
+$export_file = $params->arg[3];
+$urls = file_get_contents($urls_file);
+$urls= explode("\r\n",$urls);
+
+foreach($urls as $url)
+{
+	echo "Url : ".$url."\r\n";
+	check_all($url);
+}
+
+$export_data = "dom\turl\ttel\tcontact-form\tmailto\ttwitter\tfacebook\tgoogleplus\tlinkedin\tviadeo\twhois1\twhois2\twhois3";
+
+foreach($data as $dom)
+{
+	$export_data .= "\r\n";
+
 	$export_data .= $dom->dom;
 	$export_data .= "\t";
 	$export_data .= $dom->url;
@@ -313,11 +276,12 @@ function CrimpCallback( $Handle, $html )
 	if(isset($dom->whoisEmails[1])) { $export_data .= $dom->whoisEmails[1]; }
 	$export_data .= "\t";
 	if(isset($dom->whoisEmails[2])) { $export_data .= $dom->whoisEmails[2]; }
-  if($count == count($urls)) {
-    $export_data = "dom\turl\ttel\tcontact-form\tmailto\ttwitter\tfacebook\tgoogleplus\tlinkedin\tviadeo\twhois1\twhois2\twhois3".$export_data;
-    file_put_contents($export_file,$export_data); }
 
 }
 
+file_put_contents($export_file,$export_data);
+
+//Add Phone number
+//Add Skype
 $time2 = time()-$time;
 echo "\r\n".$time2." secondes.";

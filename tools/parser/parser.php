@@ -1,6 +1,12 @@
 <?php
 require('simple_html_dom.php');
 $url = $params->arg[2];
+$urls = file_get_contents($url);
+$urls = explode("\r\n",$urls);
+$html = "result";
+foreach($urls as $url)
+{
+$html.="\r\n".$url;
 $file_export = $params->arg[4];
 $xpaths = explode(",",$params->arg[3]);
 $result = array();
@@ -13,8 +19,8 @@ $x = new DOMXPath($dom);
 $i=0;
 foreach($xpaths as $xpath)
 {
+	echo $xpath; exit;
 	$nodeList = $x->query($xpath);
-	
 	foreach ($nodeList as $node) {
 		$result[$i][] = utf8_decode(urldecode($node->nodeValue));
 	}
@@ -37,18 +43,21 @@ $data = "";
 $i=0;
 foreach($export as $val)
 {
-	if($i>0) { $data.="\r\n"; }
+	if($i>0) { $html.="\t"; }
 	$i++;
 	$j=0;
 	foreach($val as $elem)
 	{
-		if($j>0) { $data.="\t"; }
+		if($j>0) { $html.="\t"; }
 		$j++;
-		$data.=$elem;
+		$html.=$elem;
 	}
 	
 }
 
-file_put_contents($file_export,$data);
 
-echo $data;
+//echo $data;
+
+}
+
+file_put_contents($file_export,$html);

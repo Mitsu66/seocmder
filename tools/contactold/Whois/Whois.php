@@ -26,9 +26,7 @@ class Whois
         } else
             //throw new \InvalidArgumentException("Invalid $domain syntax");
         // setup whois servers array from json file
-         __DIR__.'/whois.servers.json';
-        $this->servers = json_decode(file_get_contents( __DIR__.'\whois.servers.json' ), true);
-         //var_dump($this->servers);
+        $this->servers = json_decode(file_get_contents( __DIR__.'/whois.servers.json' ), true);
     }
 
     public function info()
