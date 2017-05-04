@@ -315,7 +315,8 @@ function CrimpCallback( $Handle, $html )
 	if(isset($dom->whoisEmails[2])) { $export_data .= $dom->whoisEmails[2]; }
   if($count == count($urls)) {
     $export_data = "dom\turl\ttel\tcontact-form\tmailto\ttwitter\tfacebook\tgoogleplus\tlinkedin\tviadeo\twhois1\twhois2\twhois3".$export_data;
-    file_put_contents($export_file,$export_data); }
+    file_put_contents($export_file,$export_data);
+	}
 
 }
 

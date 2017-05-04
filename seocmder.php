@@ -42,7 +42,8 @@ if(isset($params->arg[2]) && $params->arg[2]=="--help")
 		echo file_get_contents($helper);
 		exit;
 	} else {
-		echo "$tool not exist, please enter seocmder --help to know how to use";
+		$Console->write($tool,"Red");
+		echo " not exist, please enter seocmder --help to know how to use";
 		exit;
 	}
 }
@@ -52,6 +53,7 @@ if(is_file($script))
 {
 	include($script);
 } else {
-	echo "$tool not exist, please enter seocmder --help know how to use";
+	$Console->write($tool,"Red");
+	echo " not exist, please enter seocmder --help know how to use";
 	exit;
 }
