@@ -1,6 +1,6 @@
 <?php
 
-require('simple_html_dom.php');
+require(__DIR__.'/../../lib/simple_html_dom/simple_html_dom.php');
 $ext = "fr";
 if(isset($params->variable["ext"])) $ext= $params->variable["ext"];
 

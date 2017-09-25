@@ -1,5 +1,5 @@
 <?php
-require('simple_html_dom.php');
+require(__DIR__.'/../../lib/simple_html_dom/simple_html_dom.php');
 $url = $params->arg[2];
 $urls = file_get_contents($url);
 $urls = explode("\r\n",$urls);

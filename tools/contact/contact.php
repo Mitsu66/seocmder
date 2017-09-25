@@ -1,6 +1,6 @@
 <?php
 require('Whois/Whois.php');
-require('simple_html_dom.php');
+require(__DIR__.'/../../lib/simple_html_dom/simple_html_dom.php');
 require(__DIR__.'/../../lib/Crimp/Crimp.php');
 
 
