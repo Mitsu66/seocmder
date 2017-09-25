@@ -1,5 +1,0 @@
-Scrapp from an url
-  seocmder contact http://www.mitseo.net
-
-Scrapp from a list
-  seocmder contact urls.txt output.txt

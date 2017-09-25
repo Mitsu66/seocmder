@@ -1,9 +1,0 @@
-How to use :
-seocmder spin <masterspin file> <exportfile> -limit=<limit>
-
-<limit> is max percent of similarity accepted
-
-Example: seocmder spin masterspin.txt spin.txt -limit=50
-
-To generate x spin without control similarity, you can enter this
-seocmder spin masterspin.txt spin.txt -quantity=100

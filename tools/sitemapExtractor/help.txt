@@ -1,2 +1,0 @@
-Enter
-seocmder sitemapExtractor http://website.com/sitemap.xml output.txt
