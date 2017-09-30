@@ -217,7 +217,7 @@ if(substr($params->arg[2],0,7) == "http://" || substr($params->arg[2],0,7) == "h
   if(isset($whois_emails[2])) { $Console->write("- Whois : ","Green"); echo $whois_emails[2]."\r\n"; }
   $Console->write("\r\n_____________________________________________________\r\n","Cyan");
 	//var_dump($data);
-	exit;
+	//exit;
 }
 
 
