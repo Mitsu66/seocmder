@@ -1,8 +1,7 @@
 <?php
-require('Whois/Whois.php');
-require(__DIR__.'/../../lib/simple_html_dom/simple_html_dom.php');
-require(__DIR__.'/../../lib/Crimp/Crimp.php');
-
+import("Whois");
+import("simple_html_dom");
+import("Crimp");
 
 
 $time = time();
@@ -217,7 +216,7 @@ if(substr($params->arg[2],0,7) == "http://" || substr($params->arg[2],0,7) == "h
   if(isset($whois_emails[2])) { $Console->write("- Whois : ","Green"); echo $whois_emails[2]."\r\n"; }
   $Console->write("\r\n_____________________________________________________\r\n","Cyan");
 	//var_dump($data);
-	//exit;
+	exit;
 }
 
 
@@ -225,7 +224,7 @@ if(substr($params->arg[2],0,7) == "http://" || substr($params->arg[2],0,7) == "h
 $urls_file = $params->arg[2];
 $export_file = $params->arg[3];
 $urls = file_get_contents($urls_file);
-$urls = explode("\r\n",$urls);
+$urls = explode("\n",$urls);
 $count = 0;
 
 

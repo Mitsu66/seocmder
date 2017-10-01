@@ -1,6 +1,7 @@
 <?php
 
-require('simple_html_dom.php');
+import("simple_html_dom");
+
 $ext = "fr";
 if(isset($params->variable["ext"])) $ext= $params->variable["ext"];
 
@@ -40,16 +41,16 @@ $str =  scrapp($keyword,$ext);
     $dom->load($str);
 
 	$links = $dom->find('h3 a');
-	
+
 	$get_links = array();
-	
+
 	foreach($links as $link)
 	{
 		$dom = str_replace("https://","",$link->href);
 		$dom = str_replace("http://","",$dom);
 		$dom = explode("/",$dom);
 		$dom = $dom[0];
-		
+
 		$get_links[] = (object) array(
 			"dom" => $dom,
 			"href" => $link->href,

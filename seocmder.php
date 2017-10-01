@@ -2,6 +2,10 @@
 require('lib/params/params.php');
 require('lib/console/console.php');
 
+function import($lib){
+	require('lib/'.$lib.'/'.$lib.'.php');
+}
+
 if(!isset($params->arg[1]))
 {
 	echo "Please type seocmder --help to see how to use seocmder";

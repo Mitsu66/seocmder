@@ -1,6 +1,5 @@
 <?php
-
-require(__DIR__.'/../../lib/simple_html_dom/simple_html_dom.php');
+import("simple_html_dom");
 
 function scrapp($url)
 {
@@ -14,9 +13,9 @@ function scrapp($url)
     curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.125 Safari/533.4");
     $str = curl_exec($curl);
     curl_close($curl);
-	
+
 	return $str;
-	
+
 }
 $url = $params->arg[2];
 $output = $params->arg[3];
@@ -34,11 +33,11 @@ function get_urls($str)
 	if(strstr(strtolower($str),"<sitemap>"))
 	{
 		foreach($matches[1] as $url) { $sitemap[] = $url; }
-		foreach($sitemap as $url) { 
+		foreach($sitemap as $url) {
 			$content = scrapp($url);
-			get_urls($content); 
+			get_urls($content);
 		}
-	} else 
+	} else
 	{
 		foreach($matches[1] as $url) { $urls[] = trim($url); }
 	}

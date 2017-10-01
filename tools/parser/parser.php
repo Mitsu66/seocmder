@@ -1,5 +1,6 @@
 <?php
-require(__DIR__.'/../../lib/simple_html_dom/simple_html_dom.php');
+import("simple_html_dom");
+
 $url = $params->arg[2];
 $urls = file_get_contents($url);
 $urls = explode("\r\n",$urls);
@@ -33,7 +34,7 @@ foreach($result[0] as $key=>$value)
 	$j=0;
 	foreach($xpaths as $xpath)
 	{
-		$data[] = $result[$j][$key]; 
+		$data[] = $result[$j][$key];
 		$j++;
 	}
 	$export[$key] = $data;
@@ -52,7 +53,7 @@ foreach($export as $val)
 		$j++;
 		$html.=$elem;
 	}
-	
+
 }
 
 
