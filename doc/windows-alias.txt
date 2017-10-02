@@ -1,3 +1,5 @@
 @echo off
 doskey seocmder=C:\wamp64\bin\php\php7.0.10\php.exe C:\seocmder\seocmder.php $*
 doskey seocmder=C:\wamp64\bin\php\php7.0.10\php.exe C:\test\test.php $*
+
+doskey seocmder=C:\03-Outils\02-Externe\wamp64\bin\php\php7.0.10\php.exe C:\03-Outils\03-Perso\seocmder\seocmder\seocmder.php $*
